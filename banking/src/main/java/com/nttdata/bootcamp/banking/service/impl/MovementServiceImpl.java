@@ -1,3 +1,17 @@
+/**
+ * Resumen.
+ * Objeto                   : MovementServiceImpl.java
+ * Descripción              : Clase para los métodos de la implementación de servicio del movimiento.
+ * Fecha de Creación        : 04/08/2022.
+ * Proyecto de Creación     : Bootcamp-01.
+ * Autor                    : Marvin Castro.
+ * ---------------------------------------------------------------------------------------------------------------------------
+ * Modificaciones
+ * Motivo                   Fecha             Nombre                  Descripción
+ * ---------------------------------------------------------------------------------------------------------------------------
+ * Bootcamp-01              05/08/2022        Oscar Candela           Realizar la creación de un método nuevo.
+ */
+
 package com.nttdata.bootcamp.banking.service.impl;
 
 import com.nttdata.bootcamp.banking.model.dao.MovementDao;
@@ -10,11 +24,16 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Clase para los métodos de la implementación de servicio del movimiento.
+ */
 @Service
 public class MovementServiceImpl implements MovementService {
 
+    /** Declaración de la variable de log */
     private static final Logger log = LoggerFactory.getLogger(MovementServiceImpl.class);
 
+    /** Declaración de la clase dao */
     @Autowired
     private MovementDao movementDao;
 
