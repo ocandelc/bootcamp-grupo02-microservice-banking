@@ -51,6 +51,8 @@ public class Account {
     /** Línea de Crédito */
     private double creditLine;
 
+    private double availableAmount;
+
     /** Código de Estado de Cuenta */
     private String codeAccountState;
 
