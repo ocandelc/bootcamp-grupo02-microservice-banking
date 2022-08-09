@@ -37,6 +37,10 @@ public class MovementTypeServiceImpl implements MovementTypeService {
     @Autowired
     private MovementTypeDao movementTypeDao;
 
+    /**
+     * Método que realiza la acción insertar datos del document
+     * @return Mono retorna el MovementType, tipo Mono
+     */
     @Override
     public Mono<MovementType> insert(MovementType movementType) {
         return movementTypeDao.save(movementType)
@@ -45,6 +49,10 @@ public class MovementTypeServiceImpl implements MovementTypeService {
                 .doAfterTerminate(() -> log.info("Finish Insert MovementType"));
     }
 
+    /**
+     * Método que realiza la acción actualizar datos del document
+     * @return Mono retorna el MovementType, tipo Mono
+     */
     @Override
     public Mono<MovementType> update(MovementType movementType) {
         return movementTypeDao.findById(movementType.getId())
@@ -55,6 +63,10 @@ public class MovementTypeServiceImpl implements MovementTypeService {
                 .doAfterTerminate(() -> log.info("Finish Update MovementType"));
     }
 
+    /**
+     * Método que realiza la acción borrar datos del document
+     * @return Mono retorna el Void, tipo Mono
+     */
     @Override
     public Mono<Void> delete(String id) {
         return movementTypeDao.deleteById(id)
@@ -63,6 +75,10 @@ public class MovementTypeServiceImpl implements MovementTypeService {
                 .doAfterTerminate(() -> log.info("Finish Delete MovementType"));
     }
 
+    /**
+     * Método que realiza la acción buscar datos por id del document
+     * @return Mono retorna el MovementType, tipo String
+     */
     @Override
     public Mono<MovementType> find(String id) {
         return movementTypeDao.findById(id)
@@ -71,6 +87,10 @@ public class MovementTypeServiceImpl implements MovementTypeService {
                 .doAfterTerminate(() -> log.info("Finish Find MovementType"));
     }
 
+    /**
+     * Método que realiza la acción buscar datos por código del document
+     * @return Mono retorna el MovementType, tipo String
+     */
     @Override
     public Mono<MovementType> findByCode(String code) {
         return movementTypeDao.findByCode(code)
@@ -79,6 +99,10 @@ public class MovementTypeServiceImpl implements MovementTypeService {
                 .doAfterTerminate(() -> log.info("Finish FindByCode MovementType"));
     }
 
+    /**
+     * Método que realiza la acción buscar todos los datos del document
+     * @return Mono retorna el MovementType, tipo String
+     */
     @Override
     public Flux<MovementType> findAll() {
         return movementTypeDao.findAll()
