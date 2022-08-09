@@ -23,6 +23,10 @@ import reactor.core.publisher.Mono;
  */
 public interface MovementTypeDao extends ReactiveMongoRepository<MovementType, String> {
 
+    /**
+     * Método que obtiene los datos del document MovementType
+     * @return Mono retorna el MovementType, tipo Mono
+     */
     Mono<MovementType> findByCode(String code);
 
 }

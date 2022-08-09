@@ -24,6 +24,10 @@ import reactor.core.publisher.Mono;
  */
 public interface AccountStateDao extends ReactiveMongoRepository<AccountState, String> {
 
+    /**
+     * Método que obtiene los datos del document AccountState
+     * @return Mono retorna el AccountState, tipo Mono
+     */
     Mono<AccountState> findByCode(String code);
 
 }

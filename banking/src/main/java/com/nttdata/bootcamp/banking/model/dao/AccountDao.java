@@ -23,6 +23,10 @@ import reactor.core.publisher.Mono;
  */
 public interface AccountDao extends ReactiveMongoRepository<Account, String> {
 
+    /**
+     * Método que obtiene los datos del document Account
+     * @return Mono retorna el Account, tipo Mono
+     */
     Mono<Account> findByAccountNumber(String accountNumber);
 
 }
