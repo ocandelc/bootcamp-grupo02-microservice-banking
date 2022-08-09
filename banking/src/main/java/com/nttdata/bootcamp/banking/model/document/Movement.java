@@ -18,7 +18,7 @@ public class Movement {
     private String accountNumber;
     private Date dateRegister;
     private String codeMovementType;
-    private double currentAmount;
+    private double previousAmount;
     private double movementAmount;
     private double finalAmount;
 

@@ -22,6 +22,7 @@ public class Account {
     private String codeProduct;
     private Date dateRegister;
     private double creditLine;
+    private double availableAmount;
     private String codeAccountState;
 
 }
