@@ -26,6 +26,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Date;
+import java.util.UUID;
+
 /**
  * Clase para los métodos de la implementación de servicio de la cuenta.
  */
@@ -49,7 +52,12 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public Mono<Account> insert(Account account) {
+        /* Set parameters init */
+        account.setAccountNumber(UUID.randomUUID().toString());
+        account.setAccountInterbankNumber(UUID.randomUUID().toString());
         account.setCodeAccountState("RA");
+        account.setDateRegister(new Date());
+        /* Initiliaze proccess */
         return clientService.findByCode(account.getCodeClient()).flatMap(
                 clientResult -> {
                     if(clientResult.getCodeClientType().equals("PER")) {
@@ -122,7 +130,9 @@ public class AccountServiceImpl implements AccountService {
                     } else {
                         return Mono.error(new RuntimeException("El codigo de tipo cliente no existe"));
                     }
-                });
+                }).doFirst(() -> log.info("Begin Insert Account"))
+                .doOnNext(a -> log.info(a.toString()))
+                .doAfterTerminate(() -> log.info("Finish Insert Account"));
     }
 
     /**
