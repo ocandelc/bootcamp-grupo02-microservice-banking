@@ -16,6 +16,7 @@ package com.nttdata.bootcamp.banking.service;
 
 import com.nttdata.bootcamp.banking.model.document.Account;
 import com.nttdata.bootcamp.banking.model.document.Movement;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -23,6 +24,15 @@ import reactor.core.publisher.Mono;
  */
 public interface MovementService extends GenericService<Movement, String> {
 
+    /**
+     * Método que realiza la acción buscar datos por código de movimiento del document
+     * @return Mono retorna el T, tipo String
+     */
     Mono<Movement> findByCode(String code);
 
+    /**
+     * Método que realiza la acción buscar datos por número de cuenta del document
+     * @return Flux retorna el T, tipo String
+     */
+    Flux<Movement> findByAccountNumber(String accountNumber);
 }

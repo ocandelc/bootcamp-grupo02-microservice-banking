@@ -111,4 +111,16 @@ public class MovementServiceImpl implements MovementService {
                 .doAfterTerminate(() -> log.info("Finish FindAll Movement"));
     }
 
+    /**
+     * Método que realiza la acción buscar datos por código del document
+     * @return Flux retorna el Movement, tipo String
+     */
+    @Override
+    public Flux<Movement> findByAccountNumber(String accountNumber) {
+        return movementDao.findByAccountNumber(accountNumber)
+                .doFirst(() -> log.info("Begin FindByAccountNumber Movement"))
+                .doOnNext(m -> log.info(m.toString()))
+                .doAfterTerminate(() -> log.info("Finish FindByAccountNumber Movement"));
+    }
+
 }

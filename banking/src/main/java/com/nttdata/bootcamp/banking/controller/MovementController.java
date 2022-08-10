@@ -86,4 +86,12 @@ public class MovementController {
         return this.movementService.findAll();
     }
 
+    /**
+     * Método que realiza la acción buscar datos por número de cuenta del document
+     * @return Flux retorna el Movement, tipo String
+     */
+    @GetMapping("/findByAccountNumber/{accountNumber}")
+    public Flux<Movement> findByAccountNumber(@PathVariable String accountNumber) {
+        return this.movementService.findByAccountNumber(accountNumber);
+    }
 }
