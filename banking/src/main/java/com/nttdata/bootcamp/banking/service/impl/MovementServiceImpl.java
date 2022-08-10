@@ -14,19 +14,30 @@
 
 package com.nttdata.bootcamp.banking.service.impl;
 
+import com.nttdata.bootcamp.banking.model.dao.AccountDao;
 import com.nttdata.bootcamp.banking.model.dao.MovementDao;
 import com.nttdata.bootcamp.banking.model.document.Movement;
+import com.nttdata.bootcamp.banking.model.document.MovementType;
+import com.nttdata.bootcamp.banking.service.AccountService;
 import com.nttdata.bootcamp.banking.service.MovementService;
+import com.nttdata.bootcamp.banking.service.MovementTypeService;
+import com.nttdata.bootcamp.banking.service.ProductService;
+import com.nttdata.bootcamp.banking.util.MathUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * Clase para los métodos de la implementación de servicio del movimiento.
  */
+@Transactional
 @Service
 public class MovementServiceImpl implements MovementService {
 
@@ -36,6 +47,12 @@ public class MovementServiceImpl implements MovementService {
     /** Declaración de la clase dao */
     @Autowired
     private MovementDao movementDao;
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private MovementTypeService movementTypeService;
 
     /**
      * Método que realiza la acción insertar datos del document
@@ -43,8 +60,39 @@ public class MovementServiceImpl implements MovementService {
      */
     @Override
     public Mono<Movement> insert(Movement movement) {
-        return movementDao.save(movement)
-                .doFirst(() -> log.info("Begin Insert Movement"))
+        movement.setCode(UUID.randomUUID().toString());
+        movement.setDateRegister(new Date());
+        return movementTypeService.findByCode(movement.getCodeMovementType()).flatMap(movementType -> {
+            if(movementType.getOperationType().equals("I")) {
+                return accountService.findByAccountNumber(movement.getAccountNumber()).flatMap(account -> {
+                    movement.setPreviousAmount(account.getAvailableAmount());
+                    movement.setFinalAmount(MathUtil.sum(movement.getPreviousAmount(),
+                            movement.getMovementAmount()));
+                    account.setAvailableAmount(movement.getFinalAmount());
+                    return accountService.update(account)
+                            .flatMap(result -> {
+                                return movementDao.save(movement);
+                            });
+                });
+            } else if(movementType.getOperationType().equals("S")) {
+                return accountService.findByAccountNumber(movement.getAccountNumber()).flatMap(account -> {
+                    if(account.getAvailableAmount() >= movement.getMovementAmount()) {
+                        movement.setPreviousAmount(account.getAvailableAmount());
+                        movement.setFinalAmount(MathUtil.rest(movement.getPreviousAmount(),
+                                movement.getMovementAmount()));
+                        account.setAvailableAmount(movement.getFinalAmount());
+                        return accountService.update(account)
+                       .flatMap(result -> {
+                           return movementDao.save(movement);
+                       });
+                    } else {
+                        return Mono.error(new RuntimeException("Saldo insuficiente"));
+                    }
+                });
+            } else {
+                return Mono.error(new RuntimeException("El código tipo de movimiento no existe"));
+            }
+        }).doFirst(() -> log.info("Begin Insert Movement"))
                 .doOnNext(m -> log.info(m.toString()))
                 .doAfterTerminate(() -> log.info("Finish Insert Movement"));
     }

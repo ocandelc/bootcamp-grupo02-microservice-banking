@@ -46,7 +46,7 @@ public class Movement {
     private String codeMovementType;
 
     /** Monto actual */
-    private double currentAmount;
+    private double previousAmount;
 
     /** Monto en movimiento */
     private double movementAmount;

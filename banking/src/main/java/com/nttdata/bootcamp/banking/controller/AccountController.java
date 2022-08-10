@@ -77,6 +77,11 @@ public class AccountController {
         return this.accountService.findByAccountNumber(accountNumber);
     }
 
+    @GetMapping("/findAllByCodeClient/{code}")
+    public Flux<Account> findAllByCodeClient(@PathVariable String code) {
+        return this.accountService.findByCodeClient(code);
+    }
+
     /**
      * Método que realiza la acción buscar todos los datos del document
      * @return Flux retorna el Account, tipo Flux
